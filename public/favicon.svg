@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="TH">
+  <rect width="64" height="64" rx="4" fill="#0A1F22" />
+  <rect x="5.5" y="5.5" width="53" height="53" rx="2" fill="none" stroke="#11A297" stroke-width="1.5" />
+  <text
+    x="32"
+    y="42"
+    text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="28"
+    letter-spacing="1.5"
+    fill="#F4F1EA"
+  >TH</text>
+</svg>

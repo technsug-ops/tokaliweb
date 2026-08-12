@@ -1,0 +1,54 @@
+# Natro / cPanel (Apache) için sunucu ayarları.
+# Bu dosya `npm run build` sırasında out/ klasörüne kopyalanır ve site
+# dosyalarıyla birlikte public_html içine yüklenir.
+# Vercel/Netlify kullanılırsa bu dosya görmezden gelinir, zararı olmaz.
+
+# ---- HTTPS'e yönlendir ----
+# .well-known dışarıda bırakılır: Let's Encrypt sertifikayı doğrularken
+# http://alanadi/.well-known/acme-challenge/ adresine HTTP ile erişmek zorunda.
+# Bu satır olmasaydı sertifika hiç alınamaz, site kilitlenirdi.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_URI} !^/\.well-known/
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+</IfModule>
+
+# ---- 404 sayfası ----
+ErrorDocument 404 /404.html
+
+# ---- Dizin listelemeyi kapat ----
+Options -Indexes
+
+# ---- Güvenlik başlıkları ----
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>
+
+# ---- Önbellek ----
+# /_next/static altındaki dosyaların adı içerik değişince değişir; uzun süre
+# önbelleklenebilir. HTML her zaman taze çekilmelidir.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 month"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# ---- Sıkıştırma ----
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml
+</IfModule>
