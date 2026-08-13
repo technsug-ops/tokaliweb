@@ -11,19 +11,6 @@ export default function Document() {
           rel="stylesheet"
         />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        {/*
-          Palet karşılaştırması: ?tema=<id> ile alternatif paletler açılır.
-          Boyamadan önce çalışır, böylece tema geçişinde titreme olmaz.
-          Buradaki liste lib/palettes.ts ile aynı olmalıdır.
-        */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              "try{var t=new URLSearchParams(location.search).get('tema');" +
-              "if(t&&/^(altin|lacivert|monokrom|toprak|kontrast|klasik)$/.test(t))" +
-              "document.documentElement.dataset.theme=t}catch(e){}",
-          }}
-        />
       </Head>
       <body>
         <Main />

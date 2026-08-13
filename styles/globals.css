@@ -2,84 +2,73 @@
    TH — TOKALI HUKUK BÜROSU — Tasarım Sistemi
    ============================================================
 
-   İKİ TEMA:
-   - Varsayılan  : "Mühür" paleti (turkuaz / abis / fildişi) — renk kartelası v2
-   - ?tema=klasik: Önceki bronz–kağıt paleti (karşılaştırma için korundu)
+   PALET: Bronz–kağıt ("klasik"). Turkuaz varyasyonlar denendi, bu seçildi.
 
-   Bileşen kuralları yalnızca anlamsal tokenlara bakar; tema değişimi
-   yalnızca aşağıdaki iki blokta yaşanır.
+   Bileşen kuralları yalnızca anlamsal tokenlara bakar; renk değişikliği
+   aşağıdaki :root bloğundan yapılır, hiçbir kuralda sabit renk yoktur.
 
    RENK ROLLERİ:
 
-   --accent      Turkuaz 500. YALNIZCA dolgu ve kenarlık — hiçbir zaman metin.
-                 Paletler arasında sabittir, bu yüzden metinde kullanılırsa
-                 palet değişse bile yazı turkuaz kalır. Metin gerektiğinde
-                 zemine göre --accent-soft veya --accent-ink kullanılır.
+   --accent      Bronz. Dolgu ve kenarlık — hiçbir zaman doğrudan metin değil.
+                 Metin gerektiğinde zemine göre aşağıdaki iki token kullanılır.
    --accent-soft KOYU zeminde metin vurgusu: hero eyebrow, hero başlığındaki
-                 italik, kicker, etiketler. Palete göre değişir (P2 altın,
-                 P3 açık teal, P5 somon, P6 turkuaz).
-   --accent-ink  AÇIK zeminde metin, link ve etiket. Palete göre değişir.
-   --accent-line AÇIK zeminde kicker ve ince çizgi.
-   --on-accent   Turkuaz 950. Turkuaz dolgu üzerindeki tek meşru metin rengi.
+                 italik, kicker, form etiketleri.
+   --accent-ink  AÇIK zeminde metin, link ve etiket. Bronzun koyusu — ham bronz
+                 açık zeminde küçük metin için yeterli kontrast vermiyor.
+   --accent-line Mühür kırmızısı. Açık zeminde kicker ve ince çizgi.
+   --on-accent   Bronz dolgu üzerindeki metin rengi.
    --warm        Nokta vurgu (uyarı kutusu, rozet), ~%2 doz.
+
+   Renk değiştirirseniz `npm run kontrast` ile AA denetimini çalıştırın.
    ============================================================ */
 
 :root {
   /* Zeminler ve yüzeyler */
-  --ink: #0a1f22;          /* Abis — koyu zemin */
-  --paper: #f4f1ea;        /* Fildişi — açık zemin */
-  /* Turkuaz 50. Fildişinin koyulaştırılmış hâli (#ece8de) --muted ile 4.24:1'de
-     kalıyordu; kartelanın "açık zemin dolgusu" tonu hem AA'yı geçiyor hem de
-     bandı fildişinden ayırt edilebilir kılıyor. */
-  --paper-deep: #e9f6f4;
-  --surface: #ffffff;      /* Kart yüzeyi */
+  --ink: #15181e;          /* Koyu zemin — hero, iletişim, footer */
+  --paper: #f6f4ee;        /* Kağıt — açık sayfa zemini */
+  --paper-deep: #efece3;   /* Kağıdın koyusu — bant zeminleri, uyarı kutusu */
+  --surface: #fffdf8;      /* Kart yüzeyi */
 
   /* Metin ve çizgi */
-  --text: #22302f;         /* Metin — saf siyah kullanılmaz */
-  --muted: #61706e;        /* Dim */
-  --line: #dce2dd;         /* Sis */
+  --text: #23262c;         /* Saf siyah kullanılmaz */
+  --muted: #5c6068;
+  --line: #ddd8cc;
   --line-ink: color-mix(in srgb, var(--paper) 14%, transparent);
 
   /* Marka vurguları */
-  --accent: #11a297;       /* Turkuaz 500 */
-  --accent-hover: #45b8ae; /* Turkuaz 400 */
-  --accent-ink: #0b5c57;   /* Okyanus 800 */
-  --accent-soft: #8fd4cd;  /* Turkuaz 300 */
-  --accent-line: #0b5c57;  /* Açık zemindeki ince çizgi ve kicker */
-  --accent-tint: #e9f6f4;  /* Turkuaz 50 — açık dolgu */
-  --on-accent: #04211e;    /* Turkuaz 950 */
-  --warm: #c4763b;         /* Bakır */
+  --accent: #9c7c4c;       /* Bronz */
+  --accent-hover: #9c7c4c;
+  --accent-ink: #7d6033;   /* Bronzun koyusu — açık zeminde metin */
+  --accent-soft: #c2a274;  /* Bronzun açığı — koyu zeminde metin */
+  --accent-line: #8e3030;  /* Mühür kırmızısı */
+  --accent-tint: #efece3;
+  --on-accent: var(--ink);
+  --warm: #8e3030;
 
-  /* ---- BUTON SİSTEMİ ----
-     Turkuaz dolgu + turkuaz-950 metin 5.35:1 verir ve bu oran arkasındaki
-     zeminden bağımsızdır. Bu yüzden birincil eylem altı palette de aynıdır:
-     dünya değişir, çağrı butonu değişmez. Palet kimliği ikincil (çerçeveli)
-     butonlarda, linklerde ve etiketlerde yaşar.
-     Hover koyuya değil AÇIĞA gider — metin turkuaz-950 olduğu için koyulaşan
-     zemin (tq-600) 4.05:1'e düşüyor. */
+  /* ---- BUTON SİSTEMİ ---- */
 
   /* Birincil dolgu — koyu zeminde (hero, iletişim, X şeridi) */
-  --btn-primary-bg: var(--accent);
-  --btn-primary-fg: var(--on-accent);
-  --btn-primary-bg-hover: var(--accent-hover);
-  --btn-primary-fg-hover: var(--on-accent);
+  --btn-primary-bg: var(--paper);
+  --btn-primary-fg: var(--ink);
+  --btn-primary-bg-hover: var(--accent-soft);
+  --btn-primary-fg-hover: var(--ink);
 
-  /* Birincil dolgu — açık zeminde (onay kartı). Bilerek aynı turkuaz. */
-  --btn-solid-bg: var(--accent);
-  --btn-solid-fg: var(--on-accent);
-  --btn-solid-bg-hover: var(--accent-hover);
-  --btn-solid-fg-hover: var(--on-accent);
+  /* Birincil dolgu — açık zeminde (onay kartı) */
+  --btn-solid-bg: var(--ink);
+  --btn-solid-fg: var(--paper);
+  --btn-solid-bg-hover: var(--accent-ink);
+  --btn-solid-fg-hover: var(--paper);
 
-  /* Header'daki İletişim düğmesi — sitenin ana dönüşüm noktası, dolu turkuaz */
-  --cta-bg: var(--accent);
-  --cta-line: var(--accent);
-  --cta-fg: var(--on-accent);
-  --cta-bg-hover: var(--accent-hover);
-  --cta-fg-hover: var(--on-accent);
+  /* Header'daki İletişim düğmesi — çerçeveli, hover'da dolar */
+  --cta-bg: transparent;
+  --cta-line: var(--text);
+  --cta-fg: var(--text);
+  --cta-bg-hover: var(--ink);
+  --cta-fg-hover: var(--paper);
 
   /* WhatsApp — palet ne olursa olsun her zaman kendi yeşili. Tanınırlık
      dönüşüm getiriyor; palete uydurmak o tanınırlığı harcar.
-     Kartelanın #1f8a56 tonu beyazla 4.35:1'de kaldığından koyulaştırıldı. */
+     Yaygın #1f8a56 tonu beyazla 4.35:1'de kaldığından koyulaştırıldı. */
   --wa-bg: #1b8652;
   --wa-bg-hover: #156b41;
   --wa-fg: #ffffff;
@@ -104,10 +93,8 @@
   --radius: 2px;
 }
 
-/* Alternatif paletler ayrı dosyada: styles/palettes.css (_app.tsx içinde
-   globals.css'ten sonra yüklenir). Karar verilince o dosya ve importu silinir. */
-
-/* Koyu zeminli bloklarda vurgu ve odak rengi turkuaza döner */
+/* Koyu zeminli bloklarda odak halkası bronza döner — açık zemin için
+   koyulaştırılmış bronz burada yeterli kontrast vermiyor. */
 .hero,
 .contact,
 .x-band,
@@ -404,43 +391,6 @@ body.no-scroll { overflow: hidden; }
 .footer a { color: inherit; text-decoration: none; margin-left: 18px; }
 .footer a:hover { color: var(--paper); }
 .footer-legal { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.08em; }
-
-/* Tema karşılaştırma anahtarı — yalnızca geliştirme ortamında görünür */
-.theme-switch {
-  position: fixed;
-  left: clamp(16px, 3vw, 28px);
-  bottom: clamp(16px, 3vw, 28px);
-  z-index: 40;
-  width: 306px;
-  padding: 12px 12px 10px;
-  border-radius: 12px;
-  background: var(--ink);
-  border: 1px solid var(--line-ink);
-  box-shadow: 0 12px 26px -14px color-mix(in srgb, var(--ink) 75%, transparent);
-}
-.theme-switch-name {
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.1em;
-  color: var(--accent-soft);
-  margin-bottom: 9px;
-  padding: 0 2px;
-}
-.theme-switch-row { display: flex; flex-wrap: wrap; gap: 3px; }
-.theme-switch a {
-  padding: 7px 11px;
-  border-radius: 999px;
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: color-mix(in srgb, var(--paper) 62%, transparent);
-}
-.theme-switch a:hover { color: var(--paper); }
-.theme-switch a[aria-current="true"] { background: var(--accent); color: var(--on-accent); }
-.theme-switch a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-@media (max-width: 720px) { .theme-switch { display: none; } }
 
 /* Small accessibility and responsive tweaks */
 @media (max-width: 640px) {

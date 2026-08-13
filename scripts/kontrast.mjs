@@ -1,11 +1,11 @@
 /**
- * Palet kontrast denetleyicisi.
+ * Renk kontrastı denetleyicisi.
  *
- * styles/globals.css ve styles/palettes.css dosyalarını okur, her paletin
- * token'larını çözer ve sitede gerçekten kullanılan renk çiftlerini WCAG 2.1
- * AA eşiğine göre ölçer. Bir çift kalırsa çıkış kodu 1 döner.
+ * styles/globals.css içindeki :root bloğunu okur, token'ları çözer ve sitede
+ * gerçekten kullanılan renk çiftlerini WCAG 2.1 AA eşiğine göre ölçer.
+ * Bir çift eşiğin altında kalırsa çıkış kodu 1 döner.
  *
- * Çalıştırma:  npm run kontrast
+ * Renk değiştirdiğinizde çalıştırın:  npm run kontrast
  */
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -35,48 +35,32 @@ const ratio = (a, b) => {
 /** fg rengini bg üzerine `alpha` opaklıkla bindirir (color-mix ... transparent). */
 const over = (fg, bg, alpha) => {
   const [f, b] = [toRgb(fg), toRgb(bg)]
-  return '#' + f.map((v, i) => Math.round(v * alpha + b[i] * (1 - alpha)).toString(16).padStart(2, '0')).join('')
+  return (
+    '#' +
+    f.map((v, i) => Math.round(v * alpha + b[i] * (1 - alpha)).toString(16).padStart(2, '0')).join('')
+  )
 }
 
 /* ---------- CSS'ten token okuma ---------- */
 
-const readBlock = (css, selector) => {
-  const start = css.indexOf(selector + ' {')
-  if (start === -1) return null
-  const open = css.indexOf('{', start)
-  const close = css.indexOf('}', open)
-  const tokens = {}
-  for (const line of css.slice(open + 1, close).split('\n')) {
-    const match = line.match(/^\s*(--[\w-]+)\s*:\s*([^;]+);/)
-    if (match) tokens[match[1]] = match[2].trim()
-  }
-  return tokens
+const css = readFileSync(join(root, 'styles/globals.css'), 'utf8')
+const open = css.indexOf('{', css.indexOf(':root {'))
+const close = css.indexOf('}', open)
+const tokens = {}
+for (const line of css.slice(open + 1, close).split('\n')) {
+  const m = line.match(/^\s*(--[\w-]+)\s*:\s*([^;]+);/)
+  if (m) tokens[m[1]] = m[2].trim()
 }
+if (!Object.keys(tokens).length) throw new Error('globals.css içinde :root token bulunamadı')
 
 /** var(--x) referanslarını çözer; color-mix gibi çözülemeyenler null döner. */
-const resolve = (tokens, name, depth = 0) => {
+const resolve = (name, depth = 0) => {
   const raw = tokens[name]
   if (raw === undefined || depth > 10) return null
-  const varMatch = raw.match(/^var\((--[\w-]+)\)$/)
-  if (varMatch) return resolve(tokens, varMatch[1], depth + 1)
+  const m = raw.match(/^var\((--[\w-]+)\)$/)
+  if (m) return resolve(m[1], depth + 1)
   return /^#[0-9a-f]{3,8}$/i.test(raw) ? raw : null
 }
-
-const globalsCss = readFileSync(join(root, 'styles/globals.css'), 'utf8')
-const palettesCss = readFileSync(join(root, 'styles/palettes.css'), 'utf8')
-
-const base = readBlock(globalsCss, ':root')
-if (!base) throw new Error('globals.css içinde :root bloğu bulunamadı')
-
-const themeIds = [...palettesCss.matchAll(/:root\[data-theme="([\w-]+)"\]/g)].map((m) => m[1])
-const palettes = [
-  { id: null, label: 'P1 · Abis + Bakır (varsayılan)', tokens: base },
-  ...themeIds.map((id) => ({
-    id,
-    label: `?tema=${id}`,
-    tokens: { ...base, ...readBlock(palettesCss, `:root[data-theme="${id}"]`) },
-  })),
-]
 
 /* ---------- denetlenecek çiftler ---------- */
 /* AA: normal metin 4.5:1 · metin dışı arayüz öğesi (odak halkası) 3:1 */
@@ -87,20 +71,17 @@ const checks = [
   { name: 'ikincil metin', bg: '--paper', fg: '--muted' },
   { name: 'kicker / ince çizgi', bg: '--paper', fg: '--accent-line' },
   { name: 'link, tarih etiketi', bg: '--paper', fg: '--accent-ink' },
-  // Klasik temada İletişim düğmesi çerçevelidir (dolgusuz); orada geçerli olan
-  // çift metin/zemindir. Dolu turkuaz paletlerde bu kontrol fazladan güvencedir.
-  { name: 'header İletişim · metin/sayfa zemini', bg: '--paper', fg: '--cta-fg' },
+  { name: 'header İletişim düğmesi', bg: '--paper', fg: '--cta-fg' },
   // Açık zemin — bant (Yaklaşım bölümü, uyarı kutusu)
   { name: 'bant · metin', bg: '--paper-deep', fg: '--text' },
   { name: 'bant · ikincil metin', bg: '--paper-deep', fg: '--muted' },
   // Kart yüzeyi
+  { name: 'kart · gövde', bg: '--surface', fg: '--text' },
   { name: 'kart · ikincil metin', bg: '--surface', fg: '--muted' },
   { name: 'kart · Dosya etiketi', bg: '--surface', fg: '--accent-ink' },
-  { name: 'kart · gövde', bg: '--surface', fg: '--text' },
   // Koyu zemin
   { name: 'koyu · ana metin', bg: '--ink', fg: '--paper' },
-  { name: 'koyu · turkuaz vurgu', bg: '--ink', fg: '--accent' },
-  { name: 'koyu · ikincil etiket', bg: '--ink', fg: '--accent-soft' },
+  { name: 'koyu · vurgu metni', bg: '--ink', fg: '--accent-soft' },
   // Koyu zeminde yarı saydam metinler (globals.css'teki color-mix oranları)
   { name: 'koyu · hero alt metni %72', bg: '--ink', fg: '--paper', alpha: 0.72 },
   { name: 'koyu · X şeridi lede %70', bg: '--ink', fg: '--paper', alpha: 0.7 },
@@ -114,11 +95,9 @@ const checks = [
   { name: 'buton · birincil hover', bg: '--btn-primary-bg-hover', fg: '--btn-primary-fg-hover' },
   { name: 'buton · birincil (açık zemin)', bg: '--btn-solid-bg', fg: '--btn-solid-fg' },
   { name: 'buton · birincil açık hover', bg: '--btn-solid-bg-hover', fg: '--btn-solid-fg-hover' },
-  { name: 'buton · header İletişim', bg: '--cta-bg', fg: '--cta-fg' },
-  { name: 'buton · header İletişim hover', bg: '--cta-bg-hover', fg: '--cta-fg-hover' },
+  { name: 'buton · İletişim hover', bg: '--cta-bg-hover', fg: '--cta-fg-hover' },
   // X butonu bağlama göre ters çevrilir; iki yön de aynı çifti kullanır
   { name: 'buton · X (açık zemin)', bg: '--btn-x-bg', fg: '--btn-x-fg' },
-  { name: 'buton · X (koyu zemin)', bg: '--paper', fg: '--ink' },
   { name: 'buton · X hover', bg: '--btn-x-bg-hover', fg: '--btn-x-fg-hover' },
   { name: 'header X butonu / zemin', bg: '--paper', fg: '--btn-x-bg', min: 3 },
   { name: 'WhatsApp düğmesi', bg: '--wa-bg', fg: '--wa-fg' },
@@ -138,36 +117,33 @@ const dim = (s) => `\x1b[2m${s}\x1b[0m`
 let failed = 0
 let skipped = 0
 
-for (const palette of palettes) {
-  const rows = []
-  for (const check of checks) {
-    const min = check.min ?? 4.5
-    const bg = resolve(palette.tokens, check.bg)
-    let fg = resolve(palette.tokens, check.fg)
-    if (!bg || !fg) {
-      skipped++
-      rows.push(dim(`   —        atlandı   ${check.name} (değer çözülemedi)`))
-      continue
-    }
-    if (check.alpha) fg = over(fg, bg, check.alpha)
-    const r = ratio(bg, fg)
-    const ok = r >= min
-    if (!ok) failed++
-    const line = `${r.toFixed(2).padStart(6)}:1  ${ok ? 'AA ✓  ' : 'KALDI '} ${check.name}${
-      min !== 4.5 ? dim(` (eşik ${min}:1)`) : ''
-    }`
-    rows.push('  ' + (ok ? green(line) : red(line + `  → ${bg} / ${fg}`)))
+console.log('\nRenk kontrastı — WCAG 2.1 AA')
+console.log('─'.repeat(60))
+
+for (const check of checks) {
+  const min = check.min ?? 4.5
+  const bg = resolve(check.bg)
+  let fg = resolve(check.fg)
+
+  if (!bg || !fg) {
+    skipped++
+    console.log(dim(`   —        atlandı   ${check.name}`))
+    continue
   }
-  console.log(`\n${palette.label}`)
-  console.log('─'.repeat(64))
-  console.log(rows.join('\n'))
+  if (check.alpha) fg = over(fg, bg, check.alpha)
+
+  const r = ratio(bg, fg)
+  const ok = r >= min
+  if (!ok) failed++
+  const line = `${r.toFixed(2).padStart(6)}:1  ${ok ? 'AA ✓  ' : 'KALDI '} ${check.name}${
+    min !== 4.5 ? dim(` (eşik ${min}:1)`) : ''
+  }`
+  console.log('  ' + (ok ? green(line) : red(line + `  → ${bg} / ${fg}`)))
 }
 
-console.log('\n' + '═'.repeat(64))
-if (failed === 0) {
-  console.log(green(`Tüm paletler geçti — ${palettes.length} palet × ${checks.length} çift`))
-} else {
-  console.log(red(`${failed} çift AA eşiğinin altında kaldı`))
-}
-if (skipped) console.log(dim(`${skipped} çift atlandı (color-mix gibi çözülemeyen değerler)`))
+console.log('─'.repeat(60))
+if (failed === 0) console.log(green(`${checks.length - skipped} çiftin tamamı geçti`))
+else console.log(red(`${failed} çift AA eşiğinin altında kaldı`))
+if (skipped) console.log(dim(`${skipped} çift atlandı (transparent / color-mix)`))
+
 process.exit(failed === 0 ? 0 : 1)

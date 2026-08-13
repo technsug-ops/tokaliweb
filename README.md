@@ -17,7 +17,7 @@ npm run dev      # http://localhost:3000
 | `npm start`         | Derlenmiş çıktıyı sunar                   |
 | `npm run lint`      | ESLint (next/core-web-vitals + typescript) |
 | `npm run typecheck` | `tsc --noEmit`                            |
-| `npm run kontrast`  | Tüm paletlerin WCAG AA kontrast denetimi  |
+| `npm run kontrast`  | WCAG AA renk kontrastı denetimi           |
 | `npm run deploy`    | `out/` klasörünü FTPS ile sunucuya yükler |
 
 ## Yayınlama
@@ -55,45 +55,34 @@ olarak ayarlanır.
 ve güvenlik başlıkları oradan gelir. HTTPS yönlendirmesi `/.well-known/` dizinini
 dışarıda bırakır — Let's Encrypt sertifikayı oradan doğruladığı için bu şart.
 
-## Palet denemeleri
+## Renk paleti
 
-Renk kartelası v2 sitede uygulanmıştır. Karşılaştırma için altı varyasyon ve
-turkuaz öncesi eski palet URL parametresiyle açılabilir:
+Bronz–kağıt paleti. Turkuaz temelli altı varyasyon denendi, bu seçildi.
 
-| Palet | URL | Karakter |
-| --- | --- | --- |
-| P1 · Abis + Bakır | *(varsayılan)* | Dengeli, kurumsal |
-| P2 · Gece + Altın | `?tema=altin` | Lüks |
-| P3 · Lacivert + Mercan | `?tema=lacivert` | Klasik modern |
-| P4 · Monokrom Turkuaz | `?tema=monokrom` | Pürist |
-| P5 · Toprak + Kil | `?tema=toprak` | Sıcak premium |
-| P6 · Saf Kontrast | `?tema=kontrast` | Modernist |
-| Klasik | `?tema=klasik` | Turkuaz öncesi bronz–kağıt |
+Tüm renkler `styles/globals.css` içindeki tek `:root` bloğunda tanımlıdır;
+hiçbir kuralda sabit renk yoktur. Renk rolleri:
+
+| Token | Rol |
+| --- | --- |
+| `--accent` | Bronz. Dolgu ve kenarlık — hiçbir zaman doğrudan metin değil |
+| `--accent-soft` | Koyu zeminde metin vurgusu (hero eyebrow, italik başlık, kicker) |
+| `--accent-ink` | Açık zeminde metin ve link. Ham bronz burada yeterli kontrast vermiyor |
+| `--accent-line` | Mühür kırmızısı. Açık zeminde kicker ve ince çizgi |
+| `--warm` | Nokta vurgu (uyarı kutusu), ~%2 doz |
 
 ### Buton sistemi
 
-Butonlar palete göre değişmez; altı palette de aynıdır. Gerekçe her satırda:
-
 | Buton | Renk | Neden |
 | --- | --- | --- |
-| Birincil (Görüşme Talep Edin) | Turkuaz dolgu + `#04211E` metin | Bu çift 5.35:1 verir ve oran arkasındaki zeminden bağımsızdır — koyu hero'da da beyaz kartta da aynı çalışır |
-| Header "İletişim" | Dolu turkuaz | Sitenin ana dönüşüm noktası; her palette aynı yerde aynı renkte bulunur |
-| X butonları | Koyu zeminde açık dolgu, açık zeminde koyu dolgu | X'in kendi siyah–beyaz kimliği; hover'da turkuaza döner |
+| Birincil, koyu zemin | Kağıt dolgu + koyu metin | Hero ve iletişim bölümünde en yüksek kontrast |
+| Birincil, açık zemin | Koyu dolgu + kağıt metin | Beyaz kart üzerinde aynı ağırlık |
+| Header "İletişim" | Çerçeveli, hover'da dolar | Menüde sessiz durur, tıklanabilirliği belli |
+| X butonları | Koyu zeminde açık dolgu, açık zeminde koyu dolgu | X'in kendi siyah–beyaz kimliği; hover'da bronza döner |
 | WhatsApp | Her zaman kendi yeşili `#1B8652` | Tanınırlık dönüşüm getirir; palete uydurmak onu harcar |
-| İkincil (çerçeveli) | Paletin kendi rengi | Palet kimliği burada, linklerde ve etiketlerde yaşar |
 
-Turkuaz (`#11A297`) altı palette de sabittir; yalnızca onu çevreleyen renkler
-değişir. `npm run dev` sırasında sol altta palet anahtarı görünür — üretim
-derlemesine girmez, ama `?tema=` parametresi her ortamda çalışır.
-
-**Renk değeri değiştirdiğinizde `npm run kontrast` çalıştırın.** Betik CSS'i
-okuyup her paletin gerçekte kullanılan 30 renk çiftini ölçer ve AA eşiğinin
-altında kalan olursa hata verir.
-
-Karar verildiğinde silinecekler: `styles/palettes.css`, `lib/palettes.ts`,
-`components/ThemeSwitch.tsx`, `scripts/kontrast.mjs`, `_app.tsx` içindeki import
-ve efekt, `_document.tsx` içindeki satır içi script, `globals.css` içindeki
-`.theme-switch` kuralları.
+**Renk değiştirdiğinizde `npm run kontrast` çalıştırın.** Betik `globals.css`'i
+okuyup gerçekte kullanılan 32 renk çiftini ölçer, AA eşiğinin altında kalan
+olursa hata verir.
 
 ## Yapı
 

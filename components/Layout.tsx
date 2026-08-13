@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 import { useEffect, useId, useState } from 'react'
 import { legalLinks, navLinks, site, social, whatsapp, whatsappUrl } from '../lib/site'
 import { WhatsAppIcon, XIcon } from './Icons'
-import ThemeSwitch from './ThemeSwitch'
 
 interface LayoutProps {
   title?: string
@@ -88,16 +87,19 @@ export default function Layout({ title = site.defaultTitle, description, childre
                 </Link>
               )
             })}
-            <a
+            {/* Siteden çıkarmaz: X akışı /paylasimlar içinde gömülü olarak açılır.
+                x.com iframe'e izin vermediği (x-frame-options: SAMEORIGIN) için
+                profilin kendisi ancak yeni sekmede açılabilir — o bağlantı da
+                akışın hemen üstünde duruyor. */}
+            <Link
               className="nav-social"
-              href={social.x.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`X'te takip edin: ${social.x.label}`}
+              href="/paylasimlar"
+              aria-current={router.pathname === '/paylasimlar' ? 'page' : undefined}
+              onClick={() => setMenuOpen(false)}
             >
               <XIcon className="social-icon" />
-              <span className="nav-social-label">X&rsquo;te Takip Et</span>
-            </a>
+              <span className="nav-social-label">Paylaşımlar</span>
+            </Link>
           </nav>
 
           <button
@@ -162,8 +164,6 @@ export default function Layout({ title = site.defaultTitle, description, childre
         <WhatsAppIcon className="whatsapp-fab-icon" />
         <span className="whatsapp-fab-label">WhatsApp</span>
       </a>
-
-      {process.env.NODE_ENV === 'development' && <ThemeSwitch />}
     </>
   )
 }

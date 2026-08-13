@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Layout from '../components/Layout'
 import { XIcon } from '../components/Icons'
-import { contact, practiceAreas, site, social, whatsapp, whatsappUrl } from '../lib/site'
+import { contact, practiceAreas, site, social, whatsappUrl } from '../lib/site'
 
 const principles = [
   {
@@ -57,10 +57,10 @@ export default function Home() {
             <Link href="/contact" className="btn btn-primary">
               Görüşme Talep Edin
             </Link>
-            <a className="btn btn-x" href={social.x.url} target="_blank" rel="noopener noreferrer">
+            <Link className="btn btn-x" href="/paylasimlar">
               <XIcon className="btn-icon" />
-              X&rsquo;te Takip Edin
-            </a>
+              X Paylaşımları
+            </Link>
           </div>
           <span className="hero-vertical">{site.domain}</span>
         </div>
@@ -85,17 +85,11 @@ export default function Home() {
                 .
               </p>
             </div>
-            <a
-              className="x-card"
-              href={social.x.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`X profilini aç: ${social.x.label}`}
-            >
+            <Link className="x-card" href="/paylasimlar" aria-label="X akışını sitede görüntüle">
               <XIcon className="x-card-mark" />
               <span className="x-card-handle">{social.x.label}</span>
               <span className="x-card-meta">Hukuk gündemi · günlük notlar</span>
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -176,10 +170,11 @@ export default function Home() {
                 <span className="contact-label">Telefon</span>
                 <a href={`tel:${contact.phoneHref}`}>{contact.phone}</a>
               </div>
+              {/* Numara telefon satırında zaten yazıyor; burada eylem gösterilir. */}
               <div className="contact-row">
                 <span className="contact-label">WhatsApp</span>
                 <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                  {whatsapp.display}
+                  Aynı numaradan mesaj gönderin
                 </a>
               </div>
               <div className="contact-row">

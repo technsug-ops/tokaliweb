@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Layout from '../components/Layout'
-import { contact, site, social, whatsapp, whatsappUrl } from '../lib/site'
+import { contact, site, social, whatsappUrl } from '../lib/site'
 
 export default function Kunye() {
   return (
@@ -34,12 +34,9 @@ export default function Kunye() {
             <h2>2. İletişim</h2>
             <ul>
               <li>
-                Telefon: <a href={`tel:${contact.phoneHref}`}>{contact.phone}</a>
-              </li>
-              <li>
-                WhatsApp:{' '}
+                Telefon ve WhatsApp: <a href={`tel:${contact.phoneHref}`}>{contact.phone}</a> —{' '}
                 <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                  {whatsapp.display}
+                  WhatsApp&rsquo;tan yazın
                 </a>
               </li>
               <li>

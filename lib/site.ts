@@ -21,18 +21,6 @@ export const site = {
   copyrightYear: 2026,
 } as const
 
-export const contact = {
-  /** Ekranda görünen biçim. */
-  phone: '+90 (000) 000 00 00',
-  /** tel: bağlantısı için boşluksuz biçim. */
-  phoneHref: '+900000000000',
-  /* Bu kutunun KAS → E-Mail bölümünden oluşturulması gerekiyor; iletişim formu
-     ve tüm mailto bağlantıları buraya gidiyor. */
-  email: 'info@tokalihukuk.com.tr',
-  address: 'Adres bilgisi — Şehir / Türkiye',
-  hours: 'Hafta içi 09.00 – 18.00',
-} as const
-
 export const whatsapp = {
   /** Ekranda görünen biçim. */
   display: '+90 552 292 39 33',
@@ -40,6 +28,18 @@ export const whatsapp = {
   number: '905522923933',
   /** Sohbet açıldığında hazır gelen mesaj. */
   prefill: 'Merhaba, web siteniz üzerinden görüşme talebi için yazıyorum.',
+} as const
+
+export const contact = {
+  /* Telefon ve WhatsApp aynı hat. Bilerek tek yerden türetiliyor — ayrı yazılsa
+     biri güncellenip diğeri unutulabilir. Hat ayrılırsa buraya kendi değeri yazılır. */
+  phone: whatsapp.display,
+  phoneHref: `+${whatsapp.number}`,
+  /* Bu kutunun KAS → E-Mail bölümünden oluşturulması gerekiyor; iletişim formu
+     ve tüm mailto bağlantıları buraya gidiyor. */
+  email: 'info@tokalihukuk.com.tr',
+  address: 'Adres bilgisi — Şehir / Türkiye',
+  hours: 'Hafta içi 09.00 – 18.00',
 } as const
 
 export const whatsappUrl = `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(whatsapp.prefill)}`
@@ -69,11 +69,12 @@ export const xTimeline = {
   autoload: false,
 } as const
 
+/* /paylasimlar bilerek burada yok: menüdeki X butonu oraya gidiyor, metin
+   bağlantısı da eklenirse aynı sayfaya iki giriş olurdu. */
 export const navLinks = [
   { href: '/', label: 'Anasayfa' },
   { href: '/about', label: 'Hakkında' },
   { href: '/services', label: 'Hizmetler' },
-  { href: '/paylasimlar', label: 'Paylaşımlar' },
   { href: '/contact', label: 'İletişim' },
 ] as const
 
