@@ -24,6 +24,11 @@ export default function Kunye() {
           <div className="legal">
             <p className="legal-updated">Son güncelleme: {site.copyrightYear}</p>
 
+            {/* Yazılı mühür yalnızca burada: marka paketi 64px altını yasaklıyor,
+                bu boyutta halka yazısı okunur ve resmî sayfaya yakışıyor. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/muhur.svg" alt="" className="legal-seal" width={96} height={96} />
+
             <h2>1. Hizmet Sağlayıcı</h2>
             <p>
               {lawyer.title} {lawyer.name}

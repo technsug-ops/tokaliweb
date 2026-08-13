@@ -1,7 +1,7 @@
-<!-- Tokalı mühür logosu. Kaynak paket turkuaz paletindeydi; sitenin
-     bronz-kağıt paletine çevrildi (abis→ink, fildişi→paper, turkuaz→bronz). -->
+<!-- Tokalı mühür — yazısız çekirdek. Marka paketi kuralı: yazılı mühür
+     64px altına inmez, daha küçük yerlerde bu çekirdek kullanılır.
+     Turkuaz kaynak paletten bronz-kağıt paletine çevrildi. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
-    <circle cx="120" cy="120" r="112" fill="#15181E"/>
     <circle cx="120" cy="120" r="98" stroke="#F6F4EE" stroke-width="4" fill="none"/>
     <g stroke="#F6F4EE" stroke-width="11" stroke-linecap="round" fill="none">
       <line x1="120" y1="70" x2="120" y2="152"/>

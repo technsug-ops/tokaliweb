@@ -7,7 +7,6 @@
  */
 export const site = {
   name: 'Tokalı Hukuk & Danışmanlık',
-  shortName: 'TH',
   url: 'https://tokalihukuk.com.tr',
   domain: 'tokalihukuk.com.tr',
   defaultTitle: 'TH | Tokalı Hukuk & Danışmanlık',

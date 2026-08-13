@@ -67,9 +67,12 @@ export default function Layout({ title = site.defaultTitle, description, childre
 
       <header className="header">
         <div className="shell header-inner">
-          <Link href="/" className="wordmark">
-            <strong>{site.shortName}</strong>
-            <span>{site.name}</span>
+          <Link href="/" className="wordmark" aria-label={`${site.name} — anasayfa`}>
+            {/* Yazısız çekirdek: marka paketi yazılı mührü 64px altında yasaklıyor,
+                header 68px yüksekliğinde. Yazılı hâli künye sayfasında 96px'te. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/muhur-cekirdek.svg" alt="" className="wordmark-seal" width={38} height={38} />
+            <span className="wordmark-text">{site.name}</span>
           </Link>
 
           <nav className={`nav${menuOpen ? ' nav-open' : ''}`} id={menuId} aria-label="Ana menü">
@@ -123,8 +126,14 @@ export default function Layout({ title = site.defaultTitle, description, childre
 
       <footer className="footer">
         <div className="shell footer-inner">
-          <span className="footer-legal">
-            © {site.copyrightYear} {site.name} — {site.domain}
+          <span className="footer-brand">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/muhur-cekirdek-koyu.svg" alt="" className="footer-seal" width={40} height={40} />
+            <span className="footer-legal">
+              © {site.copyrightYear} {site.name}
+              <br />
+              {site.domain}
+            </span>
           </span>
           <nav aria-label="Yasal bağlantılar">
             {legalLinks.map((link) => (
