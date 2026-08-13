@@ -2,7 +2,8 @@
  * Sitenin tek doğruluk kaynağı. İletişim bilgisi, alan adı veya menü değişikliği
  * yalnızca bu dosyadan yapılır.
  *
- * TODO (yayına almadan önce): TELEFON ve ADRES alanları hâlâ örnek veridir.
+ * TODO (yayına almadan önce): künye sayfası açık adres istiyor — buradaki
+ * `address` yalnızca ilçe/il. Cadde, numara ve posta kodu eklenmeli.
  */
 export const site = {
   name: 'Tokalı Hukuk & Danışmanlık',
@@ -38,7 +39,9 @@ export const contact = {
   /* Bu kutunun KAS → E-Mail bölümünden oluşturulması gerekiyor; iletişim formu
      ve tüm mailto bağlantıları buraya gidiyor. */
   email: 'info@tokalihukuk.com.tr',
-  address: 'Adres bilgisi — Şehir / Türkiye',
+  /* Künye/Impressum için açık adres (cadde, no, posta kodu) gerekiyor; buradaki
+     kısa hâli sitedeki iletişim listesinde gösteriliyor. */
+  address: 'Kemer / Antalya',
   /* Gün ve saat ayrı: iletişim listesinde alt alta iki satır olarak gösteriliyor.
      `hours` ise cümle içinde kullanılan birleşik hâli. */
   workDays: 'Hafta içi',
