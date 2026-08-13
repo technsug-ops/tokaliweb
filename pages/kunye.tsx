@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Layout from '../components/Layout'
-import { contact, site, social, whatsappUrl } from '../lib/site'
+import { contact, lawyer, site, social, whatsappUrl } from '../lib/site'
 
 export default function Kunye() {
   return (
@@ -26,6 +26,9 @@ export default function Kunye() {
 
             <h2>1. Hizmet Sağlayıcı</h2>
             <p>
+              {lawyer.title} {lawyer.name}
+              {lawyer.academicTitle ? `, ${lawyer.academicTitle}` : ''}
+              <br />
               {site.name}
               <br />
               {contact.address}
@@ -52,18 +55,28 @@ export default function Kunye() {
             </ul>
 
             <h2>3. Meslek Unvanı ve Bağlı Olunan Kurallar</h2>
+            <ul>
+              <li>Mesleki unvan: {lawyer.title} (Türkiye Cumhuriyeti&rsquo;nde verilmiştir)</li>
+              <li>Akademik unvan: {lawyer.academicTitle}</li>
+              <li>
+                Bağlı olunan baro: {lawyer.bar}
+                {lawyer.barRegistrationNumber
+                  ? ` — sicil no ${lawyer.barRegistrationNumber}`
+                  : ''}
+              </li>
+              <li>Ağırlıklı çalışma alanı: {lawyer.focus}</li>
+            </ul>
             <p>
-              Mesleki unvan: Avukat (Türkiye Cumhuriyeti&rsquo;nde verilmiştir). Faaliyet, 1136 sayılı
-              Avukatlık Kanunu, Türkiye Barolar Birliği Meslek Kuralları ve Avukatlık Asgari Ücret Tarifesi
-              hükümlerine tabidir. İlgili mevzuata Türkiye Barolar Birliği&rsquo;nin internet sitesi
-              üzerinden ulaşılabilir.
+              Faaliyet; 1136 sayılı Avukatlık Kanunu, Türkiye Barolar Birliği Meslek Kuralları ve Avukatlık
+              Asgari Ücret Tarifesi hükümlerine tabidir. İlgili mevzuata Türkiye Barolar Birliği&rsquo;nin
+              internet sitesi üzerinden ulaşılabilir.
             </p>
 
             <h2>4. İçerikten Sorumlu Kişi</h2>
             <p>
-              Bu internet sitesinde yayımlanan içeriklerden {site.name} sorumludur. Site üzerindeki bilgiler
-              genel bilgilendirme amaçlıdır; somut bir uyuşmazlığa ilişkin hukuki görüş yerine geçmez ve
-              tek başına avukat–müvekkil ilişkisi kurmaz.
+              Bu internet sitesinde yayımlanan içeriklerden {lawyer.title} {lawyer.name} sorumludur. Site
+              üzerindeki bilgiler genel bilgilendirme amaçlıdır; somut bir uyuşmazlığa ilişkin hukuki görüş
+              yerine geçmez ve tek başına avukat–müvekkil ilişkisi kurmaz.
             </p>
 
             <h2>5. Dış Bağlantılar</h2>
@@ -99,12 +112,11 @@ export default function Kunye() {
             </p>
 
             <div className="legal-callout">
-              <strong>Yayın öncesi tamamlanacak:</strong> Bu sayfa yasal olarak zorunlu alanları içerir,
-              ancak aşağıdaki bilgiler hâlâ eksiktir ve mutlaka doldurulmalıdır: hizmet sağlayıcının tam
-              ticari unvanı ve hukuki biçimi, açık adres, sorumlu avukatın adı–soyadı, kayıtlı olduğu baro
-              ve baro sicil numarası, vergi dairesi ve vergi/TC kimlik numarası, varsa MERSİS numarası,
-              mesleki sorumluluk sigortası bilgisi (sigortacı ve coğrafi geçerlilik alanı) ve Almanya&rsquo;da
-              faaliyet varsa USt-IdNr. ile yetkili Rechtsanwaltskammer bilgisi.
+              <strong>Yayın öncesi tamamlanacak:</strong> Hâlâ eksik olanlar — baro levhası{' '}
+              <strong>sicil numarası</strong>, <strong>açık adres</strong> (cadde, numara, posta kodu),
+              vergi dairesi ve vergi/TC kimlik numarası, büronun hukuki biçimi (şahıs bürosu / ortaklık),
+              mesleki sorumluluk sigortası bilgisi. Ayrıca avukatın adının resmî yazımı ve baro bilgisi
+              teyit edilmelidir.
             </div>
           </div>
         </div>

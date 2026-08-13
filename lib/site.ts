@@ -22,6 +22,28 @@ export const site = {
   copyrightYear: 2026,
 } as const
 
+/**
+ * Künye/Impressum ve meslek bilgileri.
+ *
+ * TODO (yayına almadan önce):
+ * - `barRegistrationNumber` boş — baro sicil numarası künyede zorunlu.
+ * - `name` X biyografisinden ve e-posta adresinden çıkarıldı; resmî yazımını
+ *   teyit edin.
+ * - `taxOffice` / `taxNumber` boş.
+ */
+export const lawyer = {
+  name: 'İbrahim Tokalı',
+  title: 'Avukat',
+  academicTitle: 'LL.M.',
+  bar: 'İzmir Barosu',
+  /** Baro levhası sicil numarası — künyede zorunlu, doldurulmalı. */
+  barRegistrationNumber: '',
+  education: 'Ankara Hukuk Fakültesi',
+  focus: 'Ceza ve İnfaz Hukuku',
+  taxOffice: '',
+  taxNumber: '',
+} as const
+
 export const whatsapp = {
   /** Ekranda görünen biçim. */
   display: '+90 552 292 39 33',
