@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-const RECIPIENT   = 'info@tokalihukuk.com.tr';
+const RECIPIENT   = 'info@tokali-hukuk.com';
 const SITE_NAME   = 'Tokalı Hukuk & Danışmanlık';
 const MAX_NAME    = 120;
 const MAX_EMAIL   = 190;
@@ -98,7 +98,7 @@ $headers = implode("\r\n", [
     'Content-Type: text/plain; charset=UTF-8',
     'Content-Transfer-Encoding: 8bit',
     'MIME-Version: 1.0',
-    'X-Mailer: tokalihukuk.com.tr',
+    'X-Mailer: tokali-hukuk.com',
 ]);
 
 if (!mail(RECIPIENT, $subject, $body, $headers)) {

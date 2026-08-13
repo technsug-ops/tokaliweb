@@ -13,8 +13,8 @@
 #
 # SIRA:
 #   1. Natro'da nameserver'ları ns5/ns6.kasserver.com yap
-#   2. KAS → Domain → tokalihukuk.com.tr → SSL-Schutz → Let's Encrypt etkinleştir
-#   3. https://tokalihukuk.com.tr açıldığını doğrula
+#   2. KAS → Domain → tokali-hukuk.com → SSL-Schutz → Let's Encrypt etkinleştir
+#   3. https://tokali-hukuk.com açıldığını doğrula
 #   4. Aşağıdaki bloğun başındaki # işaretlerini kaldır, `npm run deploy`
 #
 # .well-known istisnası kalsın: Let's Encrypt sertifikayı o dizinden HTTP ile

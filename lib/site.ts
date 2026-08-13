@@ -7,8 +7,8 @@
  */
 export const site = {
   name: 'Tokalı Hukuk & Danışmanlık',
-  url: 'https://tokalihukuk.com.tr',
-  domain: 'tokalihukuk.com.tr',
+  url: 'https://tokali-hukuk.com',
+  domain: 'tokali-hukuk.com',
   defaultTitle: 'TH | Tokalı Hukuk & Danışmanlık',
   defaultDescription:
     'Tokalı Hukuk & Danışmanlık — ceza, infaz, iş, idare, gayrimenkul ve kira hukuku alanlarında danışmanlık ve dava takibi.',
@@ -59,7 +59,7 @@ export const contact = {
   phoneHref: `+${whatsapp.number}`,
   /* Bu kutunun KAS → E-Mail bölümünden oluşturulması gerekiyor; iletişim formu
      ve tüm mailto bağlantıları buraya gidiyor. */
-  email: 'info@tokalihukuk.com.tr',
+  email: 'info@tokali-hukuk.com',
   /* Künye/Impressum için açık adres (cadde, no, posta kodu) gerekiyor; buradaki
      kısa hâli sitedeki iletişim listesinde gösteriliyor. */
   address: 'Kemer / Antalya',

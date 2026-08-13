@@ -47,19 +47,23 @@ FTP_HOST=... FTP_USER=... FTP_DIR=... FTP_PASS=... npm run deploy
 | `FTP_DIR` | Alan adının yükleme dizini |
 | `FTP_PASS` | FTP şifresi — KAS panel şifresinden ayrıdır |
 
-Alan adı **tokalihukuk.com.tr**, Natro'da kayıtlı. Hosting All-Inkl
-(kasserver.com); nameserver'lar `ns5.kasserver.com` ve `ns6.kasserver.com`
-olarak ayarlanır.
+Asıl alan adı **tokali-hukuk.com** (Natro'da kayıtlı, hosting All-Inkl).
+Yükleme dizini `/tokali-hukuk.com/`. Nameserver'lar `ns5.kasserver.com` ve
+`ns6.kasserver.com` olarak ayarlanır.
+
+`tokalihukuk.com.tr` kaydı henüz tamamlanmadı. O dizine 301 yönlendirmesi
+konuldu; kayıt biterse otomatik olarak `tokali-hukuk.com` adresine gider.
+`tokalihukuk.com` (tiresiz) başkasına aittir.
 
 `public/.htaccess` çıktıya kopyalanır: 404 sayfası, önbellek ve güvenlik
 başlıkları oradan gelir.
 
 ### Yayına alma sırası
 
-1. **Natro** → `tokalihukuk.com.tr` için "Bilgileri Güncelle", kaydı tamamla
-2. **Natro** → nameserver'ları `ns5.kasserver.com` / `ns6.kasserver.com` yap
-3. **KAS** → Domain → SSL-Schutz → **Let's Encrypt etkinleştir**
-4. `https://tokalihukuk.com.tr` açılıyor mu kontrol et
+1. **KAS** → E-Mail → `info@tokali-hukuk.com` posta kutusunu oluştur
+2. **Natro** → `tokali-hukuk.com` nameserver'ları `ns5.kasserver.com` / `ns6.kasserver.com` yap
+3. **KAS** → Domain → `tokali-hukuk.com` → SSL-Schutz → **Let's Encrypt etkinleştir**
+4. `https://tokali-hukuk.com` açılıyor mu kontrol et
 5. `public/.htaccess` içindeki **HTTPS yönlendirme bloğunu aç** (`#` işaretlerini
    kaldır), `npm run build && npm run deploy`
 
@@ -70,7 +74,7 @@ hâle gelir. Bu yüzden blok şu an bilerek kapalı.
 
 ### İletişim formu
 
-`public/iletisim.php` mesajı doğrulayıp `info@tokalihukuk.com.tr` adresine
+`public/iletisim.php` mesajı doğrulayıp `info@tokali-hukuk.com` adresine
 gönderir; hiçbir yere kaydetmez. PHP 7.4+ ile çalışır, bal küpü alanıyla basit
 bot koruması vardır. Vercel PHP çalıştırmadığı için orada istek başarısız olur
 ve form sessizce `mailto:` taslağına düşer.
@@ -133,19 +137,13 @@ değerini `true` yapmanız yeterli. Ancak bu durumda ziyaretçi onayı olmadan X
 `pages/cerez-politikasi.tsx` güncellenmeli ve siteye açık rıza alan bir çerez bildirimi
 eklenmelidir. AB/Almanya'da ziyaretçiniz varsa onaysız yükleme hukuka aykırıdır.
 
-## İletişim formu nasıl çalışıyor?
-
-Sunucu tarafı bulunmadığından form, doğrulamadan geçtikten sonra ziyaretçinin e-posta uygulamasını
-hazır bir taslakla açar (`mailto:`). Mesaj hiçbir yerde saklanmaz, doğrudan büronun kutusuna ulaşır.
-
-Kendi sunucusu üzerinden gönderim istenirse: `components/ContactForm.tsx` içindeki `buildMailto`
-çağrısı bir `fetch('/api/contact', …)` isteğiyle değiştirilir ve `pages/api/contact.ts` altında bir
-e-posta servisi (Resend, Postmark, SMTP vb.) bağlanır.
-
 ## Yayına almadan önce tamamlanacaklar
 
-- [ ] `lib/site.ts` içindeki **telefon** ve **adres** hâlâ örnek veridir; gerçek bilgilerle
-      değiştirilmelidir. (WhatsApp numarası ve X hesabı girilmiştir.)
+- [ ] **`info@tokali-hukuk.com` posta kutusu** KAS → E-Mail'den oluşturulmalı; form
+      mesajları buraya gidiyor.
+- [ ] `lib/site.ts` → `address` yalnızca ilçe/il ("Kemer / Antalya"). Künye açık
+      adres istiyor: cadde, numara, posta kodu.
+- [ ] `lib/site.ts` → `lawyer.barRegistrationNumber`, `taxOffice`, `taxNumber` boş.
 - [ ] `pages/kunye.tsx`, `pages/kvkk.tsx` ve `pages/cerez-politikasi.tsx` sayfalarındaki uyarı
       kutuları: ticari unvan, açık adres, sorumlu avukatın adı, baro ve sicil numarası, vergi
       bilgileri, mesleki sorumluluk sigortası ve varsa VERBİS kaydı eklenmelidir. Künye sayfası
