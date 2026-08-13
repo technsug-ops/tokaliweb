@@ -3,17 +3,30 @@
 # dosyalarıyla birlikte public_html içine yüklenir.
 # Vercel/Netlify kullanılırsa bu dosya görmezden gelinir, zararı olmaz.
 
-# ---- HTTPS'e yönlendir ----
-# .well-known dışarıda bırakılır: Let's Encrypt sertifikayı doğrularken
-# http://alanadi/.well-known/acme-challenge/ adresine HTTP ile erişmek zorunda.
-# Bu satır olmasaydı sertifika hiç alınamaz, site kilitlenirdi.
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteCond %{REQUEST_URI} !^/\.well-known/
-  RewriteCond %{HTTPS} !=on
-  RewriteCond %{HTTP:X-Forwarded-Proto} !https
-  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
-</IfModule>
+# ============================================================
+# HTTPS YÖNLENDİRMESİ — SSL AKTİF OLDUKTAN SONRA AÇILACAK
+# ============================================================
+# Ölçtüm: SSL bu alan adı için KAS'ta etkinleştirilmeden önce sunucu
+# https:// isteklerini http://'ye 301 ile geri gönderiyor. Aşağıdaki blok
+# şu an açık olsaydı http → https → http sonsuz döngüsü oluşur ve site
+# tamamen erişilemez hâle gelirdi.
+#
+# SIRA:
+#   1. Natro'da nameserver'ları ns5/ns6.kasserver.com yap
+#   2. KAS → Domain → tokalihukuk.com.tr → SSL-Schutz → Let's Encrypt etkinleştir
+#   3. https://tokalihukuk.com.tr açıldığını doğrula
+#   4. Aşağıdaki bloğun başındaki # işaretlerini kaldır, `npm run deploy`
+#
+# .well-known istisnası kalsın: Let's Encrypt sertifikayı o dizinden HTTP ile
+# doğruluyor; yönlendirilirse sertifika hiç alınamaz.
+#
+# <IfModule mod_rewrite.c>
+#   RewriteEngine On
+#   RewriteCond %{REQUEST_URI} !^/\.well-known/
+#   RewriteCond %{HTTPS} !=on
+#   RewriteCond %{HTTP:X-Forwarded-Proto} !https
+#   RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+# </IfModule>
 
 # ---- 404 sayfası ----
 ErrorDocument 404 /404.html

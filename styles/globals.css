@@ -308,6 +308,10 @@ body.no-scroll { overflow: hidden; }
 .form-note { font-size: 0.82rem; color: color-mix(in srgb, var(--paper) 55%, transparent); max-width: 46ch; }
 .form-note a { color: var(--accent-soft); }
 .form-note:empty { display: none; }
+.form-ok { color: var(--accent-soft); }
+.contact-form .btn-primary[disabled] { opacity: 0.6; cursor: progress; }
+/* Bal küpü: görünmez ama display:none değil — bazı botlar gizli alanı atlar */
+.honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
 /* Anasayfa X şeridi — üçüncü taraf isteği yapmaz, yalnızca bağlantı */
 .x-band { background: var(--ink); color: var(--paper); }

@@ -51,9 +51,29 @@ Alan adı **tokalihukuk.com.tr**, Natro'da kayıtlı. Hosting All-Inkl
 (kasserver.com); nameserver'lar `ns5.kasserver.com` ve `ns6.kasserver.com`
 olarak ayarlanır.
 
-`public/.htaccess` çıktıya kopyalanır: HTTPS yönlendirmesi, 404 sayfası, önbellek
-ve güvenlik başlıkları oradan gelir. HTTPS yönlendirmesi `/.well-known/` dizinini
-dışarıda bırakır — Let's Encrypt sertifikayı oradan doğruladığı için bu şart.
+`public/.htaccess` çıktıya kopyalanır: 404 sayfası, önbellek ve güvenlik
+başlıkları oradan gelir.
+
+### Yayına alma sırası
+
+1. **Natro** → `tokalihukuk.com.tr` için "Bilgileri Güncelle", kaydı tamamla
+2. **Natro** → nameserver'ları `ns5.kasserver.com` / `ns6.kasserver.com` yap
+3. **KAS** → Domain → SSL-Schutz → **Let's Encrypt etkinleştir**
+4. `https://tokalihukuk.com.tr` açılıyor mu kontrol et
+5. `public/.htaccess` içindeki **HTTPS yönlendirme bloğunu aç** (`#` işaretlerini
+   kaldır), `npm run build && npm run deploy`
+
+**3. adımı atlamayın.** SSL etkinleşmeden sunucu `https://` isteklerini `http://`
+adresine 301 ile geri gönderiyor (ölçüldü). HTTPS yönlendirmesi o sırada açık
+olursa `http → https → http` sonsuz döngüsü oluşur ve site tamamen erişilemez
+hâle gelir. Bu yüzden blok şu an bilerek kapalı.
+
+### İletişim formu
+
+`public/iletisim.php` mesajı doğrulayıp `info@tokalihukuk.com.tr` adresine
+gönderir; hiçbir yere kaydetmez. PHP 7.4+ ile çalışır, bal küpü alanıyla basit
+bot koruması vardır. Vercel PHP çalıştırmadığı için orada istek başarısız olur
+ve form sessizce `mailto:` taslağına düşer.
 
 ## Renk paleti
 

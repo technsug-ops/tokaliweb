@@ -33,8 +33,10 @@ export default function Kvkk() {
             <h2>2. İşlenen Kişisel Veriler</h2>
             <p>
               Bu internet sitesi üzerinden yalnızca sizin ilettiğiniz veriler işlenir. İletişim formunu
-              kullandığınızda form, tarayıcınızdaki e-posta uygulamasında bir taslak oluşturur; verileriniz
-              site sunucusunda saklanmaz ve bir veri tabanına kaydedilmez.
+              gönderdiğinizde mesajınız site sunucusu üzerinden e-postaya dönüştürülerek büronun posta
+              kutusuna iletilir. Mesaj bir veri tabanına kaydedilmez; yalnızca posta kutusunda saklanır.
+              Teknik olarak zorunlu olduğu için gönderim anındaki IP adresiniz mesajın içeriğine eklenir
+              ve kötüye kullanımın önlenmesi amacıyla işlenir.
             </p>
             <ul>
               <li>Kimlik verisi: ad ve soyad.</li>
@@ -85,11 +87,16 @@ export default function Kvkk() {
               üçüncü kişilere aktarılmaz.
             </p>
             <p>
-              <strong>Yurt dışına aktarım:</strong> Büromuz kendiliğinden yurt dışına veri aktarımı yapmaz.
-              Ancak yukarıda 3. bölümde açıklandığı üzere, WhatsApp üzerinden iletişim kurmayı seçmeniz veya
-              X akışının yüklenmesine onay vermeniz hâlinde, ilgili veriler bu platformların yurt dışındaki
-              sunucularına aktarılmış olur. Bu aktarımlar tercihinize bağlıdır; bunun yerine telefon veya
-              e-posta kanallarını kullanabilirsiniz.
+              <strong>Barındırma (hosting):</strong> İnternet sitesi ve e-posta hizmeti, Almanya merkezli
+              ALL-INKL.COM – Neue Medien Münnich sunucularında barındırılmaktadır. Bu nedenle siteyi
+              ziyaret ettiğinizde ve iletişim formunu gönderdiğinizde verileriniz Almanya&rsquo;daki
+              sunucularda işlenir. Almanya, Avrupa Birliği veri koruma mevzuatına (GDPR) tabidir.
+            </p>
+            <p>
+              <strong>Diğer yurt dışı aktarımları:</strong> Yukarıda 3. bölümde açıklandığı üzere, WhatsApp
+              üzerinden iletişim kurmayı seçmeniz veya X akışının yüklenmesine onay vermeniz hâlinde ilgili
+              veriler bu platformların yurt dışındaki sunucularına da aktarılmış olur. Bu aktarımlar
+              tercihinize bağlıdır; bunun yerine telefon veya e-posta kanallarını kullanabilirsiniz.
             </p>
 
             <h2>7. Saklama Süresi</h2>

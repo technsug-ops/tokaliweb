@@ -16,11 +16,14 @@ function validate(values: Fields): Errors {
   return errors
 }
 
+/** Sunucudaki PHP alıcısı. Yalnızca All-Inkl'de çalışır. */
+const ENDPOINT = '/iletisim.php'
+
+type Status = 'idle' | 'sending' | 'sent' | 'drafted' | 'error'
+
 /**
- * Sunucu tarafı bulunmadığı için form, ziyaretçinin kendi e-posta uygulamasını
- * hazır bir taslakla açar; mesaj doğrudan büronun kutusuna ulaşır. Kendi sunucusu
- * üzerinden gönderim istenirse buradaki `buildMailto` çağrısı bir API rotasına
- * (örn. /api/contact) taşınmalıdır.
+ * Sunucu erişilemezse (örn. Vercel önizlemesinde PHP yok) kullanılan yedek:
+ * ziyaretçinin kendi e-posta uygulamasını hazır taslakla açar.
  */
 function buildMailto({ name, email, message }: Fields) {
   const subject = `Web sitesi üzerinden görüşme talebi — ${name.trim()}`
@@ -37,24 +40,49 @@ export default function ContactForm() {
   const fieldId = useId()
   const [values, setValues] = useState<Fields>(EMPTY)
   const [errors, setErrors] = useState<Errors>({})
-  const [opened, setOpened] = useState(false)
+  const [status, setStatus] = useState<Status>('idle')
+  /* Bal küpü — gerçek ziyaretçi göremez, botlar doldurur. */
+  const [website, setWebsite] = useState('')
 
   const update = (field: keyof Fields) => (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setValues((prev) => ({ ...prev, [field]: event.target.value }))
     setErrors((prev) => ({ ...prev, [field]: undefined }))
-    setOpened(false)
+    setStatus('idle')
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const found = validate(values)
     setErrors(found)
     if (Object.keys(found).length > 0) return
 
-    window.location.href = buildMailto(values)
-    setOpened(true)
+    setStatus('sending')
+    try {
+      const response = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...values, website }),
+      })
+
+      if (response.ok) {
+        setValues(EMPTY)
+        setStatus('sent')
+        return
+      }
+
+      /* 422 sunucunun doğrulaması: mesaj gerçekten hatalı, mailto'ya düşmek yanlış olur. */
+      if (response.status === 422) {
+        setStatus('error')
+        return
+      }
+      throw new Error(String(response.status))
+    } catch {
+      /* Sunucu yok ya da ulaşılamıyor: taslağa düş, ziyaretçi elde kalmasın. */
+      window.location.href = buildMailto(values)
+      setStatus('drafted')
+    }
   }
 
   const describedBy = (field: keyof Fields) => (errors[field] ? `${fieldId}-${field}-error` : undefined)
@@ -65,11 +93,24 @@ export default function ContactForm() {
         Mesaj bırakın
       </h3>
       <p className="contact-form-lede">
-        Formu doldurduğunuzda e-posta uygulamanız hazır bir taslakla açılır; göndermek için son adımı
-        siz onaylarsınız.
+        Mesajınız doğrudan {contact.email} adresine iletilir. En kısa sürede size geri döneriz.
       </p>
 
       <form onSubmit={handleSubmit} className="contact-form-inner" noValidate>
+        {/* Bal küpü: ekran okuyucudan ve gözden gizli, yalnızca botlar doldurur. */}
+        <div className="honeypot" aria-hidden="true">
+          <label htmlFor={`${fieldId}-website`}>Bu alanı boş bırakın</label>
+          <input
+            id={`${fieldId}-website`}
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            value={website}
+            onChange={(event) => setWebsite(event.target.value)}
+          />
+        </div>
+
         <div className="field">
           <label htmlFor={`${fieldId}-name`}>Adınız</label>
           <input
@@ -129,17 +170,31 @@ export default function ContactForm() {
           )}
         </div>
 
-        <button type="submit" className="btn btn-primary">
-          E-posta Taslağı Oluştur
+        <button type="submit" className="btn btn-primary" disabled={status === 'sending'}>
+          {status === 'sending' ? 'Gönderiliyor…' : 'Mesajı Gönder'}
         </button>
 
         <p className="form-note" role="status">
-          {opened ? (
+          {status === 'sent' && (
             <>
-              E-posta uygulamanız açıldı. Açılmadıysa doğrudan{' '}
-              <a href={`mailto:${contact.email}`}>{contact.email}</a> adresine yazabilirsiniz.
+              <strong className="form-ok">Mesajınız iletildi.</strong> En kısa sürede
+              dönüş yapacağız.
             </>
-          ) : (
+          )}
+          {status === 'drafted' && (
+            <>
+              Sunucuya ulaşılamadı, bunun yerine e-posta uygulamanız hazır bir taslakla açıldı.
+              Açılmadıysa doğrudan <a href={`mailto:${contact.email}`}>{contact.email}</a> adresine
+              yazabilirsiniz.
+            </>
+          )}
+          {status === 'error' && (
+            <>
+              Mesaj gönderilemedi. Lütfen tekrar deneyin veya{' '}
+              <a href={`mailto:${contact.email}`}>{contact.email}</a> adresine yazın.
+            </>
+          )}
+          {(status === 'idle' || status === 'sending') && (
             <>
               Paylaştığınız bilgiler yalnızca talebinizi yanıtlamak için kullanılır. Bu form üzerinden
               gönderilen mesajlar avukat–müvekkil ilişkisi kurmaz.
