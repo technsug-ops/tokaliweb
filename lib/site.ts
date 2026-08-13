@@ -39,6 +39,10 @@ export const contact = {
      ve tüm mailto bağlantıları buraya gidiyor. */
   email: 'info@tokalihukuk.com.tr',
   address: 'Adres bilgisi — Şehir / Türkiye',
+  /* Gün ve saat ayrı: iletişim listesinde alt alta iki satır olarak gösteriliyor.
+     `hours` ise cümle içinde kullanılan birleşik hâli. */
+  workDays: 'Hafta içi',
+  workHours: '09.00 – 18.00',
   hours: 'Hafta içi 09.00 – 18.00',
 } as const
 

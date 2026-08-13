@@ -269,6 +269,9 @@ body.no-scroll { overflow: hidden; }
 .contact-row:first-child { border-top: 1px solid var(--line-ink); }
 .contact-label { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-soft); }
 .contact-row a, .contact-row span { color: var(--paper); text-decoration: none; font-size: 0.98rem; }
+/* Çalışma saatleri: gün bilgisi saatten ayrılır — gün üstte ve soluk, saat altta */
+.contact-stack { display: grid; gap: 3px; }
+.contact-stack-lead { font-size: 0.82rem !important; color: color-mix(in srgb, var(--paper) 62%, transparent) !important; }
 .contact-row a:hover { color: var(--accent-soft); }
 .contact .btn-primary { margin-top: 30px; }
 

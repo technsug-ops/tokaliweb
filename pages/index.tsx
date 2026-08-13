@@ -170,11 +170,10 @@ export default function Home() {
                 <span className="contact-label">Telefon</span>
                 <a href={`tel:${contact.phoneHref}`}>{contact.phone}</a>
               </div>
-              {/* Numara telefon satırında zaten yazıyor; burada eylem gösterilir. */}
               <div className="contact-row">
                 <span className="contact-label">WhatsApp</span>
                 <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                  Aynı numaradan mesaj gönderin
+                  {contact.phone}
                 </a>
               </div>
               <div className="contact-row">
@@ -193,7 +192,10 @@ export default function Home() {
               </div>
               <div className="contact-row">
                 <span className="contact-label">Çalışma</span>
-                <span>{contact.hours}</span>
+                <span className="contact-stack">
+                  <span className="contact-stack-lead">{contact.workDays}</span>
+                  <span>{contact.workHours}</span>
+                </span>
               </div>
             </div>
           </div>
